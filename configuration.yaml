@@ -31,7 +31,7 @@ http:
   use_x_forwarded_for: true
 
 homeassistant:
-  # customize: !include customize.yaml
+  customize: !include customize.yaml
   elevation: !secret homeassistant_elevation
   latitude: !secret homeassistant_latitude
   longitude: !secret homeassistant_longitude
