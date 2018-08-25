@@ -1,0 +1,8 @@
+.storage/
+.uuid
+.HA_VERSION
+*.conf
+*.db
+*.log
+entity_registry.yaml
+secrets.yaml
