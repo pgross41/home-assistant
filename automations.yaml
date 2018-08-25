@@ -1,1 +1,12 @@
-[]
+- id: '1535173501626'
+  alias: Living room TV Off
+  trigger:
+  - entity_id: media_player.living_room_tv
+    platform: state
+    to: 'Off'
+  condition: []
+  action:
+  - data:
+      message: Living room TV is off
+    service: notify.pushbullet
+  hide_entity: true

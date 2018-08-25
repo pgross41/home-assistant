@@ -1,0 +1,10 @@
+alias: Home Assistant Init
+hide_entity: true
+initial_state: 'on'
+trigger:
+  platform: homeassistant
+  event: start
+action:
+  - service: notify.pushbullet
+    data_template:
+      message: Home Assistant started!

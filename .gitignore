@@ -1,6 +1,6 @@
+.HA_VERSION
 .storage/
 .uuid
-.HA_VERSION
 *.conf
 *.db
 *.log
