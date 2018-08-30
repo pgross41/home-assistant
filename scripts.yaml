@@ -1,14 +1,16 @@
-'1':
+restart_home_assistant:
   alias: Restart Home Assistant
   sequence:
     service: homeassistant.restart
-'2':
+
+play_pause_living_room_tv:
   alias: Play/Pause Living Room TV
   sequence:
     service: media_player.media_play_pause
     data:
       entity_id: media_player.living_room_tv
-'3':
+
+rewind_living_room_tv:
   alias: Rewind Living Room TV
   sequence:
     - condition: template
@@ -19,7 +21,8 @@
         seek_position: >
           {% set pos = states.media_player.living_room_tv.attributes.media_position %}
           {{ (pos-30, 0)|max }}  
-'4':
+
+fast_forward_living_room_tv:
   alias: Fast Forward Living Room TV
   sequence:
     - condition: template
@@ -31,9 +34,19 @@
           {% set pos = states.media_player.living_room_tv.attributes.media_position %}
           {% set end = states.media_player.living_room_tv.attributes.media_duration %}
           {{ (pos+30, end)|min }}   
-'5':
+
+notify_patrick:
   alias: Notify Patrick
   sequence:
     service: notify.pushbullet
     data_template:
       message: Home Assistant says hi
+      
+notify_lg_tv_call:
+  alias: Notify LG TV call
+  sequence:
+    - service: notify.lg_tv
+      data_template:
+        message: "{{message}}"
+        data:
+          icon: "/config/images/phone.png"

@@ -6,3 +6,5 @@
 *.log
 entity_registry.yaml
 secrets.yaml
+.coud
+.cloud/production_auth.json

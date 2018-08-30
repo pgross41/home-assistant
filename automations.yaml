@@ -1,12 +1,90 @@
-- id: '1535173501626'
-  alias: Living room TV Off
+- id: lg_tv_on
+  alias: LG TV On
   trigger:
-  - entity_id: media_player.living_room_tv
+  - entity_id: media_player.lg_tv
+    from: 'off'
     platform: state
-    to: 'Off'
   condition: []
   action:
   - data:
-      message: Living room TV is off
-    service: notify.pushbullet
+      entity_id: media_player.lg_tv
+    service: media_player.volume_up
+  - data:
+      entity_id: media_player.lg_tv
+    service: media_player.volume_up
+  - data:
+      entity_id: media_player.lg_tv
+    service: media_player.volume_up
+  - data:
+      entity_id: media_player.lg_tv
+    service: media_player.volume_up
+  - service: media_player.volume_up
+  - data:
+      entity_id: media_player.lg_tv
+    service: media_player.volume_up
+  - data:
+      entity_id: media_player.lg_tv
+    service: media_player.volume_up
+  - data:
+      entity_id: media_player.lg_tv
+    service: media_player.volume_up
   hide_entity: true
+- id: home_assistant_init
+  alias: Home Assistant Init
+  hide_entity: true
+  initial_state: 'on'
+  trigger:
+    platform: homeassistant
+    event: start
+  action:
+  - service: notify.pushbullet
+    data_template:
+      message: Home Assistant started!
+- id: login_fail
+  alias: Send notification upon failed login attempt
+  hide_entity: true
+  trigger:
+  - platform: state
+    entity_id: persistent_notification.httplogin
+  condition:
+  - condition: template
+    value_template: '{{ trigger.to_state.state != off }}'
+  action:
+  - service: notify.pushbullet
+    data_template:
+      title: Failed Home Assistant login attempt!
+      message: 'IP: {{ states.persistent_notification.httplogin.attributes.message.split
+        ("from ") [1]}}'
+      data:
+        url: http://www.ip-tracker.org/locator/ip-lookup.php?ip={{ states.persistent_notification.httplogin.attributes.message.split
+          ("from ") [1]}}
+- id: living_room_tv_off
+  alias: Living Room TV Off
+  hide_entity: true
+  trigger:
+  - entity_id: media_player.living_room_tv
+    for:
+      seconds: 60
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      entity_id: media_player.lg_tv
+    service: media_player.turn_off
+- id: daily_backup
+  hide_entity: true
+  alias: Daily 3 AM Backup
+  trigger:
+    platform: time
+    at: '3:00:00'
+  action:
+  - service: hassio.snapshot_full
+    data_template:
+      name: Automated Backup {{ now().strftime('%Y-%m-%d') }}
+  - delay: 01:00:00
+  - service: hassio.addon_stdin
+    data:
+      addon: 7be23ff5_dropbox_sync
+      input:
+        command: upload

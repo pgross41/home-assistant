@@ -1,0 +1,114 @@
+# So many
+# https://github.com/ntalekt/homeassistant/blob/87c931714767b4a3e0e867aa334e9e4a35d0ae19/sensor.yaml
+
+- platform: yr
+
+##########################################################
+# Home Assistant
+##########################################################
+
+- platform: command_line
+  command: python3 -c "import requests; print(requests.get('https://pypi.python.org/pypi/homeassistant/json').json()['info']['version'])"
+  name: Current HA Release
+  scan_interval: 3600
+
+- platform: command_line
+  command: /usr/local/bin/hass --version
+  name: Installed HA Version
+  scan_interval: 3600
+
+- platform: sql
+  db_url: !secret recorder_db_url
+  queries:
+    - name: HA DB Size
+      query: 'SELECT table_schema "database", Round(Sum(data_length + index_length) / 1024 / 1024 / 1024, 2) "value" FROM information_schema.tables WHERE table_schema="hass_db" GROUP BY table_schema;'
+      column: 'value'
+      unit_of_measurement: GB
+
+- platform: cpuspeed      
+  name: CPU Speed
+
+- platform: command_line
+  name: CPU Temp
+  command: "cat /sys/class/thermal/thermal_zone0/temp"
+  unit_of_measurement: "C"
+  value_template: '{{ value | multiply(0.001) | round(1) }}'
+
+- platform: command_line
+  name: HA Last Reboot
+  command: cat /proc/uptime | awk '{printf "%0.f", $1}'
+  scan_interval: 60
+  value_template: >-
+    {% set uptime = value | int %}
+    {% set seconds = uptime % 60 %}
+    {% set minutes = ((uptime % 3600) / 60) | int %}
+    {% set hours = ((uptime % 86400) / 3600) | int %}
+    {% set days = (uptime / 86400) | int %}
+    {%- if days > 0 -%}
+      {%- if days == 1 -%}
+        1 day
+      {%- else -%}
+        {{ days }} days
+      {%- endif -%}
+      {{ ', ' }}
+    {%- endif -%}
+    {{ '%02d' % hours }}:{{ '%02d' % minutes }}
+
+- platform: command_line
+  name: HA Uptime
+  command: echo "$(($(date +%s) - $(date -d "$(head -n1 /config/home-assistant.log | cut -d' ' -f-2)" +%s)))"
+  scan_interval: 60
+  value_template: >-
+    {% set uptime = value | int %}
+    {% set seconds = uptime % 60 %}
+    {% set minutes = ((uptime % 3600) / 60) | int %}
+    {% set hours = ((uptime % 86400) / 3600) | int %}
+    {% set days = (uptime / 86400) | int %}
+    {%- if days > 0 -%}
+      {%- if days == 1 -%}
+        1 day
+      {%- else -%}
+        {{ days }} days
+      {%- endif -%}
+      {{ ', ' }}
+    {%- endif -%}
+    {{ '%02d' % hours }}:{{ '%02d' % minutes }}
+
+- platform: systemmonitor
+  resources:
+    - type: memory_use_percent
+    - type: processor_use
+
+- platform: command_line
+  name: SSL Cert Expiration
+  unit_of_measurement: days
+  scan_interval: 3600
+  command: !secret ssl_cert_check_command
+
+##########################################################
+# Birthdays
+##########################################################
+
+# - platform: command_line
+#   name: Birthday Countdown userthree
+#   unit_of_measurement: days
+#   scan_interval: 3600
+#   command: "BDAY=`date -d REDACTED +%j | awk '{print $1 + 0}'`; TODAY=`date +%j | awk '{print $1 + 0}'`; DAYS=$(($BDAY - $TODAY)); echo $DAYS"
+
+##########################################################
+# Days in current month
+##########################################################
+
+- platform: command_line
+  command: cal $(date +"%m %Y") | awk 'NF {DAYS = $NF}; END {print DAYS}'
+  name: Days In Current Month
+  scan_interval: 3600
+
+##########################################################
+# Days in current month
+##########################################################
+- platform: speedtest
+  monitored_conditions:
+    - ping
+    - download
+    - upload

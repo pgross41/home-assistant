@@ -1,0 +1,33 @@
+group.all_automations:
+  friendly_name: Automations
+  hidden: false
+group.all_scripts:
+  friendly_name: Scripts
+  hidden: false
+group.all_covers:
+  friendly_name: Covers
+  hidden: false
+weather.living_room:
+  friendly_name: Weather
+cover.garage_door:
+  friendly_name: Garage Door
+  device_class: garage
+script.restart_home_assistant: 
+  icon: mdi:refresh
+
+##########################################################
+# Sensors
+##########################################################
+
+sensor.cpu_speed:
+  icon: mdi:download
+sensor.cpu_temp:
+  icon: mdi:temperature-celsius  
+sensor.ha_db_size:
+  icon: mdi:database
+sensor.ha_last_reboot:
+  icon: mdi:restart
+sensor.ha_uptime:
+  icon: mdi:av-timer  
+sensor.ssl_cert_expiration:
+  icon: mdi:certificate

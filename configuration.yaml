@@ -1,7 +1,32 @@
 automation: !include automations.yaml
 automation old: !include_dir_list automations
 
+camera:
+  - platform: generic
+    name: Living Room
+    still_image_url: !secret camera_1_url
+  - platform: generic
+    name: Porch
+    still_image_url: !secret camera_2_url
+  - platform: generic
+    name: Puppies
+    still_image_url: !secret camera_3_url
+  - platform: generic
+    name: Garage
+    still_image_url: !secret camera_4_url
+
 cloud:
+  google_actions:
+    filter:
+      include_entities:
+        - cover.garage_door
+        - media_player.lg_tv
+      include_domains:
+        - script
+    entity_config:
+      media_player.lg_tv:
+        name: LG TV
+        room: living room
 
 config:
 
@@ -21,6 +46,15 @@ frontend:
 group: !include groups.yaml
 
 history:
+  domains:
+    - updater
+    - camera
+    - script
+    - sun
+    - automation
+    - zone
+    - zwave
+    - input_boolean
 
 http:
   api_password: !secret http_api_password 
@@ -51,21 +85,42 @@ logger:
 
 map:
 
+media_player: 
+  - platform: webostv
+    name: LG TV
+    host: 192.168.1.19
+
 notify: 
   - platform: pushbullet
     name: Pushbullet
     api_key: !secret pushbullet_api_key  
+  - platform: webostv
+    host: 192.168.1.19
+    name: lg_tv
+
+panel_iframe:
+  configurator:
+    title: Configurator
+    icon: mdi:wrench
+    url: !secret configurator_url
+  cams:
+    title: Cams
+    icon: mdi:sunglasses
+    url: !secret cams_url
 
 recorder:
   purge_keep_days: 14
+  db_url: !secret recorder_db_url
   exclude:
     entities:
       - media_player.galaxy_s7
 
-sensor:
-  - platform: yr
+sensor: !include sensors.yaml
 
 script: !include scripts.yaml
+
+shell_command: 
+  secret: /usr/share/hassio/homeassistant/shell/secret.sh
 
 sun:
 
