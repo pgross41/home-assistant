@@ -20,9 +20,9 @@ cloud:
     filter:
       include_entities:
         - cover.garage_door
-        - media_player.lg_tv
-      include_domains:
-        - script
+        - media_player.lg_tsw
+        - script.notify_patrick
+        - script.restart_home_assistant
     entity_config:
       media_player.lg_tv:
         name: LG TV
@@ -46,7 +46,8 @@ frontend:
 group: !include groups.yaml
 
 history:
-  domains:
+  exclude: 
+    domains:
     - updater
     - camera
     - script
@@ -107,6 +108,10 @@ panel_iframe:
     title: Cams
     icon: mdi:sunglasses
     url: !secret cams_url
+  pihole:
+    title: Pi-hole
+    icon: mdi:block-helper
+    url: !secret pihole_url  
 
 recorder:
   purge_keep_days: 14
@@ -121,8 +126,13 @@ script: !include scripts.yaml
 
 shell_command: 
   secret: /usr/share/hassio/homeassistant/shell/secret.sh
+  set_pihole_hosts: /usr/share/hassio/homeassistant/shell/set_pihole_hosts.sh
 
 sun:
+
+switch:
+  - platform: tplink
+    host: 192.168.1.64  
 
 tts:
   - platform: google

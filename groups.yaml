@@ -1,21 +1,34 @@
 # Views
 default_view:
+  name: All
+
+home:
   name: Home
   view: yes
   icon: mdi:home
   entities:
     - media_player.living_room_speaker
+    - media_player.living_room_tv
     - media_player.lg_tv
     - climate.living_room
     - weather.living_room
+
+hass:
+  name: Home Assistant
+  view: yes
+  icon: mdi:home-assistant
+  entities: 
     - group.all_automations
     - group.all_scripts
     - group.all_covers
     - group.all_devices
+    - group.all_switches
     - group.system    
+
 cameras:
   name: Cams
   view: yes
+  icon: mdi:cctv
   entities:
     - camera.living_room
     - camera.porch
@@ -25,8 +38,9 @@ cameras:
 # Non-Views
 System:
   entities:
-    - sensor.speedtest
-    - sensor.cpu_speed
+    # - sensor.speedtest
+    - sensor.processor_use
+    - sensor.disk_use_percent
     - sensor.cpu_temp
     - sensor.memory_use_percent
     - sensor.ha_db_size

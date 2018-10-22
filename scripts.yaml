@@ -2,51 +2,49 @@ restart_home_assistant:
   alias: Restart Home Assistant
   sequence:
     service: homeassistant.restart
-
-play_pause_living_room_tv:
-  alias: Play/Pause Living Room TV
-  sequence:
-    service: media_player.media_play_pause
-    data:
-      entity_id: media_player.living_room_tv
-
 rewind_living_room_tv:
   alias: Rewind Living Room TV
   sequence:
-    - condition: template
-      value_template: '{{ "media_position" in states.media_player.living_room_tv.attributes }}'
-    - service: media_player.media_seek
-      entity_id: media_player.living_room_tv
-      data_template:
-        seek_position: >
-          {% set pos = states.media_player.living_room_tv.attributes.media_position %}
-          {{ (pos-30, 0)|max }}  
-
+  - condition: template
+    value_template: '{{ "media_position" in states.media_player.living_room_tv.attributes
+      }}'
+  - service: media_player.media_seek
+    entity_id: media_player.living_room_tv
+    data_template:
+      seek_position: "{% set pos = states.media_player.living_room_tv.attributes.media_position\
+        \ %} {{ (pos-30, 0)|max }}  \n"
 fast_forward_living_room_tv:
   alias: Fast Forward Living Room TV
   sequence:
-    - condition: template
-      value_template: '{{ "media_position" in states.media_player.living_room_tv.attributes and "media_duration" in states.media_player.living_room_tv.attributes}}'
-    - service: media_player.media_seek
-      entity_id: media_player.living_room_tv
-      data_template:
-        seek_position: >
-          {% set pos = states.media_player.living_room_tv.attributes.media_position %}
-          {% set end = states.media_player.living_room_tv.attributes.media_duration %}
-          {{ (pos+30, end)|min }}   
-
+  - condition: template
+    value_template: '{{ "media_position" in states.media_player.living_room_tv.attributes
+      and "media_duration" in states.media_player.living_room_tv.attributes}}'
+  - service: media_player.media_seek
+    entity_id: media_player.living_room_tv
+    data_template:
+      seek_position: "{% set pos = states.media_player.living_room_tv.attributes.media_position\
+        \ %} {% set end = states.media_player.living_room_tv.attributes.media_duration\
+        \ %} {{ (pos+30, end)|min }}   \n"
 notify_patrick:
   alias: Notify Patrick
   sequence:
-    service: notify.pushbullet
+  - data:
+      Message: Hello from HA
     data_template:
       message: Home Assistant says hi
-      
+    service: notify.pushbullet
 notify_lg_tv_call:
   alias: Notify LG TV call
   sequence:
-    - service: notify.lg_tv
-      data_template:
-        message: "{{message}}"
-        data:
-          icon: "/config/images/phone.png"
+  - service: notify.lg_tv
+    data_template:
+      message: '{{message}}'
+      data:
+        icon: /config/images/phone.png
+talk:
+  alias: TTS Example
+  sequence: 
+  - service: tts.google_say
+    entity_id: media_player.living_room_speaker
+    data:
+      message: 'Hello Liz'

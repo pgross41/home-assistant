@@ -18,7 +18,6 @@
   - data:
       entity_id: media_player.lg_tv
     service: media_player.volume_up
-  - service: media_player.volume_up
   - data:
       entity_id: media_player.lg_tv
     service: media_player.volume_up
@@ -28,7 +27,6 @@
   - data:
       entity_id: media_player.lg_tv
     service: media_player.volume_up
-  hide_entity: true
 - id: home_assistant_init
   alias: Home Assistant Init
   hide_entity: true
@@ -40,6 +38,8 @@
   - service: notify.pushbullet
     data_template:
       message: Home Assistant started!
+  - delay: 00:01:00
+  - service: shell_command.set_pihole_hosts
 - id: login_fail
   alias: Send notification upon failed login attempt
   hide_entity: true
@@ -58,9 +58,9 @@
       data:
         url: http://www.ip-tracker.org/locator/ip-lookup.php?ip={{ states.persistent_notification.httplogin.attributes.message.split
           ("from ") [1]}}
-- id: living_room_tv_off
-  alias: Living Room TV Off
-  hide_entity: true
+- id: lg_tv_off
+  initial_state: 'off'
+  alias: LG TV Off
   trigger:
   - entity_id: media_player.living_room_tv
     for:
@@ -73,7 +73,6 @@
       entity_id: media_player.lg_tv
     service: media_player.turn_off
 - id: daily_backup
-  hide_entity: true
   alias: Daily 3 AM Backup
   trigger:
     platform: time
@@ -88,3 +87,22 @@
       addon: 7be23ff5_dropbox_sync
       input:
         command: upload
+- id: 'hall_light_sunset'
+  alias: Hall light on at sunset
+  trigger:
+    event: sunset
+    platform: sun
+    offset: '+00:00:00'
+  condition: []
+  action:
+    service: switch.turn_on
+    entity_id: switch.my_smart_plug_mini
+- id: 'hall_light_midnight'
+  alias: Hall light off at midnight
+  trigger:
+    platform: time
+    at: "00:00:00"
+  condition: []
+  action:
+    service: switch.turn_off
+    entity_id: switch.my_smart_plug_mini

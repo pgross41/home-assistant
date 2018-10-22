@@ -3,6 +3,10 @@
 
 - platform: yr
 
+- platform: plex
+  host: 192.168.1.11
+  token: !secret plex_token
+
 ##########################################################
 # Home Assistant
 ##########################################################
@@ -17,16 +21,13 @@
   name: Installed HA Version
   scan_interval: 3600
 
-- platform: sql
-  db_url: !secret recorder_db_url
-  queries:
-    - name: HA DB Size
-      query: 'SELECT table_schema "database", Round(Sum(data_length + index_length) / 1024 / 1024 / 1024, 2) "value" FROM information_schema.tables WHERE table_schema="hass_db" GROUP BY table_schema;'
-      column: 'value'
-      unit_of_measurement: GB
-
-- platform: cpuspeed      
-  name: CPU Speed
+# - platform: sql
+#   db_url: !secret recorder_db_url
+#   queries:
+#     - name: HA DB Size
+#       query: 'SELECT table_schema "database", Round(Sum(data_length + index_length) / 1024 / 1024 / 1024, 2) "value" FROM information_schema.tables WHERE table_schema="hass_db" GROUP BY table_schema;'
+#       column: 'value'
+#       unit_of_measurement: GB
 
 - platform: command_line
   name: CPU Temp
@@ -78,6 +79,8 @@
   resources:
     - type: memory_use_percent
     - type: processor_use
+    - type: disk_use_percent
+      arg: /    
 
 - platform: command_line
   name: SSL Cert Expiration
@@ -107,8 +110,8 @@
 ##########################################################
 # Days in current month
 ##########################################################
-- platform: speedtest
-  monitored_conditions:
-    - ping
-    - download
-    - upload
+# - platform: speedtest
+#   monitored_conditions:
+#     - ping
+#     - download
+#     - upload

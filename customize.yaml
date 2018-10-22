@@ -7,6 +7,9 @@ group.all_scripts:
 group.all_covers:
   friendly_name: Covers
   hidden: false
+group.all_switches:
+  friendly_name: Switches
+  hidden: false
 weather.living_room:
   friendly_name: Weather
 cover.garage_door:
@@ -31,3 +34,11 @@ sensor.ha_uptime:
   icon: mdi:av-timer  
 sensor.ssl_cert_expiration:
   icon: mdi:certificate
+  
+
+##########################################################
+# Switches
+##########################################################
+switch.my_smart_plug_mini:
+  friendly_name: Hall Lamp
+  icon: mdi:lamp
