@@ -15,19 +15,6 @@ camera:
     name: Garage
     still_image_url: !secret camera_4_url
 
-cloud:
-  google_actions:
-    filter:
-      include_entities:
-        - cover.garage_door
-        - media_player.lg_tsw
-        - script.notify_patrick
-        - script.restart_home_assistant
-    entity_config:
-      media_player.lg_tv:
-        name: LG TV
-        room: living room
-
 config:
 
 cover: 
@@ -36,12 +23,26 @@ cover:
   password: !secret myq_password
   type: chamberlain
 
+device_tracker:
+  - platform: owntracks_http  
+
 discovery:
 
 ecobee:
   api_key: !secret ecobee_api_key 
 
 frontend:
+                                                  
+google_assistant:
+  project_id: !secret google_assistant_project_id
+  api_key: !secret google_assistant_api_key
+  expose_by_default: true
+  exposed_domains:
+    - cover
+    - media_player
+    - switch
+    - light
+    - script
 
 group: !include groups.yaml
 
@@ -133,6 +134,13 @@ sun:
 switch:
   - platform: tplink
     host: 192.168.1.64  
+  - platform: command_line
+    switches:
+      pihole_switch:
+        command_on: !secret pihole_command_on
+        command_off: !secret pihole_command_off
+        command_state: "curl -X GET 'http://192.168.1.2:4865/admin/api.php?status'"
+        value_template: "{{ value_json.status == 'enabled' }}"    
 
 tts:
   - platform: google

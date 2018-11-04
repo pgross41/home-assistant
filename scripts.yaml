@@ -40,7 +40,7 @@ notify_lg_tv_call:
     data_template:
       message: '{{message}}'
       data:
-        icon: /config/images/phone.png
+        icon: /config/www/images/phone.png
 talk:
   alias: TTS Example
   sequence: 

@@ -1,0 +1,16 @@
+
+patrick_galaxys7:
+  hide_if_away: false
+  icon: 
+  mac:
+  name: Patrick
+  picture: /local/images/bidnight.jpg
+  track: true
+
+liz_iphone:
+  hide_if_away: false
+  icon:
+  mac:
+  name: Liz
+  picture: /local/images/headshot.jpg
+  track: true

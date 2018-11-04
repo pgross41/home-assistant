@@ -42,3 +42,7 @@ sensor.ssl_cert_expiration:
 switch.my_smart_plug_mini:
   friendly_name: Hall Lamp
   icon: mdi:lamp
+
+switch.pihole_switch:
+  friendly_name: Ad-blocking
+  icon: mdi:block-helper
