@@ -82,8 +82,9 @@ logger:
   default: error
   logs:
     homeassistant.core: warning
-    homeassistant.components.notify: debug
+    # homeassistant.components.notify: debug
     homeassistant.components.automation: debug
+    homeassistant.components.shell_command: debug
 
 map:
 
@@ -115,7 +116,7 @@ panel_iframe:
     url: !secret pihole_url  
 
 recorder:
-  purge_keep_days: 14
+  purge_keep_days: 7
   db_url: !secret recorder_db_url
   exclude:
     entities:
@@ -126,6 +127,7 @@ sensor: !include sensors.yaml
 script: !include scripts.yaml
 
 shell_command: 
+  cam_2_snapshot: "curl -X GET $(sh shell/secret.sh 'camera_2_url') > www/images/snapshot_cam_2.jpg"
   secret: /usr/share/hassio/homeassistant/shell/secret.sh
   set_pihole_hosts: /usr/share/hassio/homeassistant/shell/set_pihole_hosts.sh
 

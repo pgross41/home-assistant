@@ -38,8 +38,6 @@
   - service: notify.pushbullet
     data_template:
       message: Home Assistant started!
-  - delay: 00:01:00
-  - service: shell_command.set_pihole_hosts
 - id: login_fail
   alias: Send notification upon failed login attempt
   hide_entity: true
@@ -73,7 +71,7 @@
       entity_id: media_player.lg_tv
     service: media_player.turn_off
 - id: daily_backup
-  alias: Daily 3 AM Backup
+  alias: Weekly 3 AM Backup
   trigger:
     platform: time
     at: '3:00:00'
@@ -81,7 +79,7 @@
   - service: hassio.snapshot_full
     data_template:
       name: Automated Backup {{ now().strftime('%Y-%m-%d') }}
-  - delay: 01:00:00
+  - delay: 07:00:00
   - service: hassio.addon_stdin
     data:
       addon: 7be23ff5_dropbox_sync

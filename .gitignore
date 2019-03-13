@@ -9,3 +9,4 @@ secrets.yaml
 .coud
 .cloud/production_auth.json
 /tts/*
+www/images/snapshot_cam_*.jpg

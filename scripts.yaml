@@ -41,6 +41,15 @@ notify_lg_tv_call:
       message: '{{message}}'
       data:
         icon: /config/www/images/phone.png
+notify_lg_tv_cam:
+  alias: Notify LG TV cam
+  sequence:
+  - service: shell_command.cam_2_snapshot
+  - service: notify.lg_tv
+    data_template:
+      message: 'Motion detected on front porch'
+      data:
+        icon: /config/www/images/snapshot_cam_2.jpg
 talk:
   alias: TTS Example
   sequence: 
