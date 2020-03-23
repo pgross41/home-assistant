@@ -18,13 +18,10 @@ camera:
 config:
 
 cover: 
-  platform: myq
-  username: !secret myq_username
-  password: !secret myq_password
-  type: chamberlain
-
-device_tracker:
-  - platform: owntracks_http  
+  - platform: myq
+    username: !secret myq_username
+    password: !secret myq_password
+    type: chamberlain
 
 discovery:
 
@@ -35,8 +32,8 @@ frontend:
                                                   
 google_assistant:
   project_id: !secret google_assistant_project_id
-  api_key: !secret google_assistant_api_key
-  expose_by_default: true
+  service_account: !include .google_service_account.json
+  report_state: true
   exposed_domains:
     - cover
     - media_player
@@ -57,14 +54,6 @@ history:
     - zone
     - zwave
     - input_boolean
-
-http:
-  api_password: !secret http_api_password 
-  base_url: !secret http_base_url
-  ip_ban_enabled: true
-  login_attempts_threshold: 10
-  trusted_proxies: !secret http_trusted_proxies
-  use_x_forwarded_for: true
 
 homeassistant:
   customize: !include customize.yaml
@@ -88,10 +77,11 @@ logger:
 
 map:
 
-media_player: 
-  - platform: webostv
-    name: LG TV
-    host: 192.168.1.19
+webostv: 
+  host: 192.168.1.19
+  name: LG TV
+
+mobile_app:
 
 notify: 
   - platform: pushbullet
@@ -102,10 +92,6 @@ notify:
     name: lg_tv
 
 panel_iframe:
-  configurator:
-    title: Configurator
-    icon: mdi:wrench
-    url: !secret configurator_url
   cams:
     title: Cams
     icon: mdi:sunglasses
@@ -133,19 +119,22 @@ shell_command:
 
 sun:
 
-switch:
-  - platform: tplink
-    host: 192.168.1.64  
-  - platform: command_line
-    switches:
-      pihole_switch:
-        command_on: !secret pihole_command_on
-        command_off: !secret pihole_command_off
-        command_state: "curl -X GET 'http://192.168.1.2:4865/admin/api.php?status'"
-        value_template: "{{ value_json.status == 'enabled' }}"    
+# switch:
+#   - platform: command_line
+#     switches:
+#       pihole_switch:
+#         command_on: !secret pihole_command_on
+#         command_off: !secret pihole_command_off
+#         command_state: "curl -X GET 'http://192.168.1.2:4865/admin/api.php?status'"
+#         value_template: "{{ value_json.status == 'enabled' }}"    
+        
+system_health:      
 
-tts:
-  - platform: google
+tplink: 
+
+# tts:
+#   - platform: google_translate
+#     service_name: google_say
 
 updater:
   include_used_components: true

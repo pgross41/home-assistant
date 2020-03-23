@@ -8,5 +8,6 @@ entity_registry.yaml
 secrets.yaml
 .coud
 .cloud/production_auth.json
+.google_service_account.json
 /tts/*
 www/images/snapshot_cam_*.jpg
