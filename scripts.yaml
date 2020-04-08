@@ -44,16 +44,50 @@ notify_lg_tv_call:
 notify_lg_tv_cam:
   alias: Notify LG TV cam
   sequence:
-  - service: shell_command.cam_2_snapshot
   - service: notify.lg_tv
-    data_template:
-      message: 'Motion detected on front porch'
+    data:
+      message: Motion detected on front porch
       data:
         icon: /config/www/images/snapshot_cam_2.jpg
+notify_liz_phone_cam:
+  alias: Notify Liz Phone cam
+  sequence:
+  - data_template:
+      data:
+        attachment:
+          hide-thumbnail: false
+          url: https://h-a.twosquaredlove.duckdns.org/local/images/snapshot_cam_2.jpg?{{now().strftime("%s")}}.jpg
+      title: Motion detected on front porch
+      message: '{{message}}'
+    service: notify.mobile_app_iphone
+notify_pushbullet_cam:
+  alias: Notify Pushbullet cam
+  sequence:
+  - data_template:
+      data:
+        file_url: https://h-a.twosquaredlove.duckdns.org/local/images/snapshot_cam_2.jpg?{{now().strftime("%s")}}.jpg
+      message: '{{message}}'
+      title: Motion detected on front porch
+    service: notify.pushbullet
+cam_2_motion_detected_notifications:
+  alias: Cam 2 motion detected notifications
+  sequence:
+  - service: script.notify_lg_tv_cam
+  - service: script.notify_liz_phone_cam
+    data_template:
+      message: '{{timestamp}}'
+  - service: script.notify_pushbullet_cam
+    data_template:
+      message: '{{timestamp}}'
 talk:
   alias: TTS Example
-  sequence: 
+  sequence:
   - service: tts.google_say
     entity_id: media_player.living_room_speaker
     data:
-      message: 'Hello Liz'
+      message: Hello Liz
+cam_2_snapshot:
+  alias: Cam 2 snapshot
+  sequence:
+  - data: {}
+    service: shell_command.cam_2_snapshot

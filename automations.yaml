@@ -57,12 +57,10 @@
         url: http://www.ip-tracker.org/locator/ip-lookup.php?ip={{ states.persistent_notification.httplogin.attributes.message.split
           ("from ") [1]}}
 - id: lg_tv_off
-  initial_state: 'off'
   alias: LG TV Off
   trigger:
   - entity_id: media_player.living_room_tv
-    for:
-      seconds: 60
+    for: 0:05:00
     platform: state
     to: 'off'
   condition: []
@@ -70,6 +68,7 @@
   - data:
       entity_id: media_player.lg_tv
     service: media_player.turn_off
+  initial_state: 'off'
 - id: daily_backup
   alias: Weekly 3 AM Backup
   trigger:
@@ -85,21 +84,21 @@
       addon: 7be23ff5_dropbox_sync
       input:
         command: upload
-- id: 'hall_light_sunset'
+- id: hall_light_sunset
   alias: Hall light on at sunset
   trigger:
     event: sunset
     platform: sun
-    offset: '+00:00:00'
+    offset: +00:00:00
   condition: []
   action:
     service: switch.turn_on
     entity_id: switch.my_smart_plug_mini
-- id: 'hall_light_midnight'
+- id: hall_light_midnight
   alias: Hall light off at midnight
   trigger:
     platform: time
-    at: "00:00:00"
+    at: 00:00:00
   condition: []
   action:
     service: switch.turn_off

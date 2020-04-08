@@ -32,6 +32,7 @@ frontend:
                                                   
 google_assistant:
   project_id: !secret google_assistant_project_id
+  secure_devices_pin: !secret google_assistant_secure_devices_pin
   service_account: !include .google_service_account.json
   report_state: true
   exposed_domains:
@@ -96,10 +97,6 @@ panel_iframe:
     title: Cams
     icon: mdi:sunglasses
     url: !secret cams_url
-  pihole:
-    title: Pi-hole
-    icon: mdi:block-helper
-    url: !secret pihole_url  
 
 recorder:
   purge_keep_days: 7
