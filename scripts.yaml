@@ -56,29 +56,51 @@ notify_liz_phone_cam:
       data:
         attachment:
           hide-thumbnail: false
-          url: https://h-a.twosquaredlove.duckdns.org/local/images/snapshot_cam_2.jpg?{{now().strftime("%s")}}.jpg
-      title: Motion detected on front porch
-      message: '{{message}}'
+          url: https://h-a.twosquaredlove.duckdns.org/local/images/snapshot_cam_{{channel_number}}.jpg?{{now().strftime("%s")}}.jpg
+      title: '{{message}}'
+      message: '{{timestamp}}'
     service: notify.mobile_app_iphone
+notify_patrick_phone_cam:
+  alias: Notify Patrick Phone cam
+  sequence:
+  - data_template:
+      data:
+        image: https://h-a.twosquaredlove.duckdns.org/local/images/snapshot_cam_{{channel_number}}.jpg?{{now().strftime("%s")}}.jpg
+        clickAction: https://www.dropbox.com/home/Apps/DVR163/ch{{channel_number}}?preview={{file_name}}.jpg
+        sticky: false
+        tag: motion_cam_{{channel_number}}
+      title: '{{message}}'
+      message: '{{timestamp}}'
+    service: notify.mobile_app_patrick_s_galaxy_s10
 notify_pushbullet_cam:
   alias: Notify Pushbullet cam
   sequence:
   - data_template:
       data:
-        file_url: https://h-a.twosquaredlove.duckdns.org/local/images/snapshot_cam_2.jpg?{{now().strftime("%s")}}.jpg
-      message: '{{message}}'
-      title: Motion detected on front porch
+        file_url: https://h-a.twosquaredlove.duckdns.org/local/images/snapshot_cam_{{channel_number}}.jpg?{{now().strftime("%s")}}.jpg
+      title: '{{message}}'
+      message: '{{timestamp}} {{now}}'
     service: notify.pushbullet
-cam_2_motion_detected_notifications:
-  alias: Cam 2 motion detected notifications
+motion_detected_notifications:
+  alias: Motion detected notifications
   sequence:
-  - service: script.notify_lg_tv_cam
-  - service: script.notify_liz_phone_cam
+  # - service: script.notify_lg_tv_cam
+  # - service: script.notify_liz_phone_cam
+  #   data_template:
+  #     timestamp: '{{timestamp}}'
+  #     message: '{{timestamp}}'
+  #     channel_number: '{{channel_number}}'
+  - service: script.notify_patrick_phone_cam
     data_template:
-      message: '{{timestamp}}'
-  - service: script.notify_pushbullet_cam
-    data_template:
-      message: '{{timestamp}}'
+      channel_number: '{{channel_number}}'
+      file_name: '{{file_name}}'
+      message: '{{message}}'
+      timestamp: '{{timestamp}}'
+  # - service: script.notify_pushbullet_cam
+  #   data_template:
+  #     timestamp: '{{timestamp}}'      
+  #     message: '{{timestamp}}'      
+  #     channel_number: '{{channel_number}}'      
 talk:
   alias: TTS Example
   sequence:

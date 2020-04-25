@@ -7,6 +7,14 @@ script.restart_home_assistant:
   icon: mdi:refresh
 
 ##########################################################
+# People
+##########################################################
+person.patrick:
+  entity_picture: "/local/images/patrick.png"
+person.liz:
+  entity_picture: "/local/images/liz.png"
+
+##########################################################
 # Sensors
 ##########################################################
 
