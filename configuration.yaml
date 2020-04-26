@@ -65,6 +65,20 @@ homeassistant:
   time_zone: !secret homeassistant_time_zone
   unit_system: imperial
 
+input_boolean:
+  cam_1_notify:
+    name: Send notifications when cam 1 detects motion
+    icon: mdi:cellphone-wireless
+  cam_2_notify:
+    name: Send notifications when cam 2 detects motion
+    icon: mdi:cellphone-wireless
+  cam_3_notify:
+    name: Send notifications when cam 3 detects motion
+    icon: mdi:cellphone-wireless
+  cam_4_notify:
+    name: Send notifications when cam 4 detects motion
+    icon: mdi:cellphone-wireless    
+
 logbook:
 
 logger: 
@@ -78,10 +92,6 @@ logger:
 
 map:
 
-webostv: 
-  host: 192.168.1.19
-  name: LG TV
-
 mobile_app:
 
 notify: 
@@ -91,10 +101,18 @@ notify:
   - platform: webostv
     host: 192.168.1.19
     name: lg_tv
+    
+panel_custom:
+  - name: my-panel
+    sidebar_title: TodoMVC
+    sidebar_icon: mdi:work
+    js_url: /local/my-panel.js
+    config:
+      who: world
 
 panel_iframe:
   cams:
-    title: Cams
+    title: Cams site
     icon: mdi:sunglasses
     url: !secret cams_url
 
@@ -135,3 +153,7 @@ tplink:
 
 updater:
   include_used_components: true
+
+webostv: 
+  host: 192.168.1.19
+  name: LG TV  

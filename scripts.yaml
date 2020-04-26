@@ -84,12 +84,17 @@ notify_pushbullet_cam:
 motion_detected_notifications:
   alias: Motion detected notifications
   sequence:
-  # - service: script.notify_lg_tv_cam
-  # - service: script.notify_liz_phone_cam
-  #   data_template:
-  #     timestamp: '{{timestamp}}'
-  #     message: '{{timestamp}}'
-  #     channel_number: '{{channel_number}}'
+  - condition: template
+    value_template: '{{ is_state("input_boolean.cam_" ~ channel_number ~ "_notify", "on") }}'    
+  - condition: state
+    entity_id: input_boolean.cam_{{channel_number}}_notify
+    state: 'on' 
+  - service: script.notify_lg_tv_cam
+  - service: script.notify_liz_phone_cam
+    data_template:
+      timestamp: '{{timestamp}}'
+      message: '{{timestamp}}'
+      channel_number: '{{channel_number}}'
   - service: script.notify_patrick_phone_cam
     data_template:
       channel_number: '{{channel_number}}'
