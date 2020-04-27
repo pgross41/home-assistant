@@ -4,6 +4,6 @@ python:
 before_install:
   - mv .travis_secrets.yaml secrets.yaml
 install:
-  - pip3 install homeassistant==0.107.5
+  - pip3 install homeassistant==0.103.6 # Should be 0.107.5 but pip3 can't find it
 script:
   - hass -c . --script check_config
