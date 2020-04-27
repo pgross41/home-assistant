@@ -85,10 +85,7 @@ motion_detected_notifications:
   alias: Motion detected notifications
   sequence:
   - condition: template
-    value_template: '{{ is_state("input_boolean.cam_" ~ channel_number ~ "_notify", "on") }}'    
-  - condition: state
-    entity_id: input_boolean.cam_{{channel_number}}_notify
-    state: 'on' 
+    value_template: '{{ is_state("input_boolean.cam_" ~ channel_number ~ "_notify", "on") }}'
   - service: script.notify_lg_tv_cam
   - service: script.notify_liz_phone_cam
     data_template:
