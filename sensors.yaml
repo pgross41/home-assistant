@@ -8,6 +8,29 @@
   token: !secret plex_token
 
 ##########################################################
+# Cams
+##########################################################
+- platform: command_line
+  command: stat -c '%Y' /usr/share/hassio/homeassistant/www/images/snapshot_cam_1.jpg
+  name: Cam 1 last motion time
+  scan_interval: 60
+
+- platform: command_line
+  command: stat -c '%Y' /usr/share/hassio/homeassistant/www/images/snapshot_cam_2.jpg
+  name: Cam 2 last motion time
+  scan_interval: 60
+  
+- platform: command_line
+  command: stat -c '%Y' /usr/share/hassio/homeassistant/www/images/snapshot_cam_3.jpg
+  name: Cam 3 last motion time
+  scan_interval: 60
+  
+- platform: command_line
+  command: stat -c '%Y' /usr/share/hassio/homeassistant/www/images/snapshot_cam_4.jpg
+  name: Cam 4 last motion time
+  scan_interval: 60  
+
+##########################################################
 # Home Assistant
 ##########################################################
 

@@ -66,7 +66,7 @@ notify_patrick_phone_cam:
   - data_template:
       data:
         image: https://h-a.twosquaredlove.duckdns.org/local/images/snapshot_cam_{{channel_number}}.jpg?{{now().strftime("%s")}}.jpg
-        clickAction: https://www.dropbox.com/home/Apps/DVR163/ch{{channel_number}}?preview={{file_name}}.jpg
+        clickAction: https://www.dropbox.com/home/Apps/DVR163/ch{{channel_number}}?file={{file_name}}.jpg
         sticky: false
         tag: motion_cam_{{channel_number}}
       title: '{{message}}'
@@ -85,7 +85,7 @@ motion_detected_notifications:
   alias: Motion detected notifications
   sequence:
   - condition: template
-    value_template: '{{ is_state("input_boolean.cam_" ~ channel_number ~ "_notify", "on") }}'
+    value_template: '{{ is_state("timer.disable_cams", "idle") and is_state("input_boolean.cam_" ~ channel_number ~ "_notify", "on") }}'
   - service: script.notify_lg_tv_cam
   - service: script.notify_liz_phone_cam
     data_template:

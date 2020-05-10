@@ -68,16 +68,16 @@ homeassistant:
 input_boolean:
   cam_1_notify:
     name: Send notifications when cam 1 detects motion
-    icon: mdi:cellphone-wireless
+    icon: mdi:cellphone-nfc
   cam_2_notify:
     name: Send notifications when cam 2 detects motion
-    icon: mdi:cellphone-wireless
+    icon: mdi:cellphone-nfc
   cam_3_notify:
     name: Send notifications when cam 3 detects motion
-    icon: mdi:cellphone-wireless
+    icon: mdi:cellphone-nfc
   cam_4_notify:
     name: Send notifications when cam 4 detects motion
-    icon: mdi:cellphone-wireless    
+    icon: mdi:cellphone-nfc
 
 logbook:
 
@@ -143,7 +143,11 @@ sun:
 #         command_state: "curl -X GET 'http://192.168.1.2:4865/admin/api.php?status'"
 #         value_template: "{{ value_json.status == 'enabled' }}"    
         
-system_health:      
+system_health:    
+
+timer:
+  disable_cams:
+    duration: '01:00:00'
 
 tplink: 
 

@@ -29,7 +29,6 @@
     service: media_player.volume_up
 - id: home_assistant_init
   alias: Home Assistant Init
-  hide_entity: true
   initial_state: 'on'
   trigger:
     platform: homeassistant
@@ -40,7 +39,6 @@
       message: Home Assistant started!
 - id: login_fail
   alias: Send notification upon failed login attempt
-  hide_entity: true
   trigger:
   - platform: state
     entity_id: persistent_notification.httplogin
