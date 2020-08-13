@@ -29,12 +29,12 @@
     service: media_player.volume_up
 - id: home_assistant_init
   alias: Home Assistant Init
-  initial_state: 'on'
+  initial_state: true
   trigger:
     platform: homeassistant
     event: start
   action:
-  - service: notify.pushbullet
+  - service: notify.mobile_app_galaxy_s10
     data_template:
       message: Home Assistant started!
 - id: login_fail
@@ -46,7 +46,7 @@
   - condition: template
     value_template: '{{ trigger.to_state.state != off }}'
   action:
-  - service: notify.pushbullet
+  - service: notify.mobile_app_galaxy_s10
     data_template:
       title: Failed Home Assistant login attempt!
       message: 'IP: {{ states.persistent_notification.httplogin.attributes.message.split

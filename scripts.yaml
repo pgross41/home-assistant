@@ -32,7 +32,7 @@ notify_patrick:
       Message: Hello from HA
     data_template:
       message: Home Assistant says hi
-    service: notify.pushbullet
+    service: notify.mobile_app_galaxy_s10
 notify_lg_tv_call:
   alias: Notify LG TV call
   sequence:
