@@ -9,7 +9,7 @@ camera:
     name: Porch
     still_image_url: !secret camera_2_url
   - platform: generic
-    name: Puppies
+    name: Basement
     still_image_url: !secret camera_3_url
   - platform: generic
     name: Garage
@@ -101,20 +101,6 @@ notify:
   - platform: webostv
     host: 192.168.1.19
     name: lg_tv
-    
-panel_custom:
-  - name: my-panel
-    sidebar_title: TodoMVC
-    sidebar_icon: mdi:work
-    js_url: /local/my-panel.js
-    config:
-      who: world
-
-panel_iframe:
-  cams:
-    title: Cams site
-    icon: mdi:sunglasses
-    url: !secret cams_url
 
 recorder:
   purge_keep_days: 7
