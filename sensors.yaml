@@ -1,32 +1,96 @@
 # So many
 # https://github.com/ntalekt/homeassistant/blob/87c931714767b4a3e0e867aa334e9e4a35d0ae19/sensor.yaml
 
-- platform: yr
-
-- platform: plex
-  host: 192.168.1.11
-  token: !secret plex_token
+##########################################################
+# Ecobee
+##########################################################
+- platform: history_stats
+  name: HVAC run time today
+  entity_id: sensor.hvac_action
+  state: 
+    - cooling
+    - heating
+    - fan
+  type: time
+  end: '{{ now() }}'
+  duration:
+    hours: 24
+- platform: history_stats
+  name: HVAC run time today no fan
+  entity_id: sensor.hvac_action
+  state: heating
+  type: time
+  end: '{{ now() }}'
+  duration:
+    hours: 24
+- platform: history_stats
+  name: HVAC run count today
+  entity_id: sensor.hvac_action
+  state: 
+    - cooling
+    - heating
+    - fan
+  type: count
+  end: '{{ now() }}'
+  duration:
+    hours: 24
+- platform: history_stats
+  name: HVAC run count today no fan
+  entity_id: sensor.hvac_action
+  state: heating
+  type: count
+  end: '{{ now() }}'
+  duration:
+    hours: 24
+- platform: template
+  sensors:
+    current_temperature:
+      friendly_name: Current Temperature
+      value_template: >
+        {{ state_attr('climate.living_room', 'current_temperature') }}
+      unit_of_measurement: °F
+    target_temperature:
+      friendly_name: Target Temperature
+      value_template: >
+        {{ state_attr('climate.living_room', 'temperature') }}
+      unit_of_measurement: °F
+    hvac_action:
+      friendly_name: HVAC action
+      value_template: >
+        {{ state_attr('climate.living_room', 'hvac_action') }}
+    hvac_action_heating:
+      friendly_name: HVAC action heating
+      value_template: >
+        {{ {"heating": "1"}[state_attr('climate.living_room', 'hvac_action')] | default("0")  }}
+    hvac_action_cooling:
+      friendly_name: HVAC action cooling
+      value_template: >
+        {{ {"cooling": "1"}[state_attr('climate.living_room', 'hvac_action')] | default("0")  }}
+    hvac_action_fan:
+      friendly_name: HVAC action fan
+      value_template: >
+        {{ {"fan": "0.5"}[state_attr('climate.living_room', 'hvac_action')] | default("0")  }}
 
 ##########################################################
 # Cams
 ##########################################################
 - platform: command_line
-  command: stat -c '%Y' /usr/share/hassio/homeassistant/www/images/snapshot_cam_1.jpg
+  command: stat -c '%Y' www/images/snapshot_cam_1.jpg
   name: Cam 1 last motion time
   scan_interval: 60
 
 - platform: command_line
-  command: stat -c '%Y' /usr/share/hassio/homeassistant/www/images/snapshot_cam_2.jpg
+  command: stat -c '%Y' www/images/snapshot_cam_2.jpg
   name: Cam 2 last motion time
   scan_interval: 60
   
 - platform: command_line
-  command: stat -c '%Y' /usr/share/hassio/homeassistant/www/images/snapshot_cam_3.jpg
+  command: stat -c '%Y' www/images/snapshot_cam_3.jpg
   name: Cam 3 last motion time
   scan_interval: 60
   
 - platform: command_line
-  command: stat -c '%Y' /usr/share/hassio/homeassistant/www/images/snapshot_cam_4.jpg
+  command: stat -c '%Y' www/images/snapshot_cam_4.jpg
   name: Cam 4 last motion time
   scan_interval: 60  
 
@@ -44,13 +108,13 @@
   name: Installed HA Version
   scan_interval: 3600
 
-# - platform: sql
-#   db_url: !secret recorder_db_url
-#   queries:
-#     - name: HA DB Size
-#       query: 'SELECT table_schema "database", Round(Sum(data_length + index_length) / 1024 / 1024 / 1024, 2) "value" FROM information_schema.tables WHERE table_schema="hass_db" GROUP BY table_schema;'
-#       column: 'value'
-#       unit_of_measurement: GB
+- platform: sql
+  db_url: !secret recorder_db_url
+  queries:
+    - name: HA DB Size
+      query: 'SELECT table_schema "database", Round(Sum(data_length + index_length) / 1024 / 1024, 2) "value" FROM information_schema.tables WHERE table_schema="homeassistant" GROUP BY table_schema;'
+      column: 'value'
+      unit_of_measurement: MB
 
 - platform: command_line
   name: CPU Temp
@@ -105,12 +169,6 @@
     - type: disk_use_percent
       arg: /    
 
-- platform: command_line
-  name: SSL Cert Expiration
-  unit_of_measurement: days
-  scan_interval: 3600
-  command: !secret ssl_cert_check_command
-
 ##########################################################
 # Birthdays
 ##########################################################
@@ -129,12 +187,3 @@
   command: cal $(date +"%m %Y") | awk 'NF {DAYS = $NF}; END {print DAYS}'
   name: Days In Current Month
   scan_interval: 3600
-
-##########################################################
-# Days in current month
-##########################################################
-# - platform: speedtest
-#   monitored_conditions:
-#     - ping
-#     - download
-#     - upload

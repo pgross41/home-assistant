@@ -69,10 +69,10 @@
 - id: daily_backup
   alias: Weekly 3 AM Backup
   trigger:
-    platform: time
-    at: '3:00:00'
+  - platform: time
+    at: 03:00:00
   action:
-  - service: hassio.snapshot_full
+  - service: hassio.backup_full
     data_template:
       name: Automated Backup {{ now().strftime('%Y-%m-%d') }}
   - delay: 07:00:00
@@ -100,3 +100,135 @@
   action:
     service: switch.turn_off
     entity_id: switch.my_smart_plug_mini
+- id: '1601357483832'
+  alias: Garage - Close at 1030pm
+  description: ''
+  trigger:
+  - at: '22:30:00'
+    platform: time
+  condition:
+  - condition: device
+    device_id: 17730cc7651d59a2ce7f62bd74bce041
+    domain: cover
+    entity_id: cover.garage_door
+    type: is_open
+  action:
+  - device_id: 17730cc7651d59a2ce7f62bd74bce041
+    domain: cover
+    entity_id: cover.garage_door
+    type: close
+  - data:
+      message: Closing garage door!
+    service: notify.mobile_app_galaxy_s10
+  mode: single
+- id: '1601412923544'
+  alias: Garage - Warn at 7pm
+  description: ''
+  trigger:
+  - at: '19:00:00'
+    platform: time
+  condition:
+  - condition: device
+    device_id: 17730cc7651d59a2ce7f62bd74bce041
+    domain: cover
+    entity_id: cover.garage_door
+    type: is_open
+  action:
+  - data:
+      message: Garage door is open!
+    service: notify.mobile_app_galaxy_s10
+  mode: single
+- id: '1604490143949'
+  alias: Living room speaker - Quiet at 12am
+  description: ''
+  trigger:
+  - at: 00:00:00
+    platform: time
+  condition: []
+  action:
+  - data:
+      volume_level: 0.35
+    service: media_player.volume_set
+    target:
+      entity_id: media_player.living_room_speaker_2
+  mode: single
+- id: '1604490333730'
+  alias: Living room speaker - Loud at 7am
+  description: ''
+  trigger:
+  - at: 07:00:00
+    platform: time
+  condition: []
+  action:
+  - data:
+      volume_level: 0.5
+    entity_id: media_player.living_room_speaker_2
+    service: media_player.volume_set
+  mode: single
+- id: '1610366607551'
+  alias: Ava Speaker off 6am
+  description: ''
+  trigger:
+  - platform: time
+    at: '6:00'
+  condition: []
+  action:
+  - service: media_player.turn_off
+    data: {}
+    entity_id: media_player.ava_bedroom_speaker
+  mode: single
+- id: '1610866591305'
+  alias: Write Weather to CSV
+  description: ''
+  trigger:
+  - platform: time
+    at: '12:00:00'
+  condition: []
+  action:
+  - service: notify.weatherdata
+    data_template:
+      message: '{{ utcnow() }},{{ states.weather.openweathermap.state }},{{ state_attr(''weather.openweathermap'',
+        ''temperature'') }},{{ state_attr(''weather.openweathermap'', ''precipitation'')
+        }},{{ state_attr(''weather.openweathermap'', ''wind_speed'') }},{{ state_attr(''weather.openweathermap'',
+        ''wind_bearing'') }},{{ state_attr(''weather.openweathermap'', ''forecast'')[0].datetime
+        }},{{ state_attr(''weather.openweathermap'', ''forecast'')[0].condition }},{{
+        state_attr(''weather.openweathermap'', ''forecast'')[0].temperature }},{{
+        state_attr(''weather.openweathermap'', ''forecast'')[0].precipitation }},{{
+        state_attr(''weather.openweathermap'', ''forecast'')[0].wind_speed }},{{ state_attr(''weather.openweathermap'',
+        ''forecast'')[0].wind_bearing }},{{ state_attr(''weather.openweathermap'',
+        ''forecast'')[1].datetime }},{{ state_attr(''weather.openweathermap'', ''forecast'')[1].condition
+        }},{{ state_attr(''weather.openweathermap'', ''forecast'')[1].temperature
+        }},{{ state_attr(''weather.openweathermap'', ''forecast'')[1].precipitation
+        }},{{ state_attr(''weather.openweathermap'', ''forecast'')[1].wind_speed }},{{
+        state_attr(''weather.openweathermap'', ''forecast'')[1].wind_bearing }},{{
+        state_attr(''weather.openweathermap'', ''forecast'')[2].datetime }},{{ state_attr(''weather.openweathermap'',
+        ''forecast'')[2].condition }},{{ state_attr(''weather.openweathermap'', ''forecast'')[2].temperature
+        }},{{ state_attr(''weather.openweathermap'', ''forecast'')[2].precipitation
+        }},{{ state_attr(''weather.openweathermap'', ''forecast'')[2].wind_speed }},{{
+        state_attr(''weather.openweathermap'', ''forecast'')[2].wind_bearing }},{{
+        state_attr(''weather.openweathermap'', ''forecast'')[3].datetime }},{{ state_attr(''weather.openweathermap'',
+        ''forecast'')[3].condition }},{{ state_attr(''weather.openweathermap'', ''forecast'')[3].temperature
+        }},{{ state_attr(''weather.openweathermap'', ''forecast'')[3].precipitation
+        }},{{ state_attr(''weather.openweathermap'', ''forecast'')[3].wind_speed }},{{
+        state_attr(''weather.openweathermap'', ''forecast'')[3].wind_bearing }},{{
+        state_attr(''weather.openweathermap'', ''forecast'')[4].datetime }},{{ state_attr(''weather.openweathermap'',
+        ''forecast'')[4].condition }},{{ state_attr(''weather.openweathermap'', ''forecast'')[4].temperature
+        }},{{ state_attr(''weather.openweathermap'', ''forecast'')[4].precipitation
+        }},{{ state_attr(''weather.openweathermap'', ''forecast'')[4].wind_speed }},{{
+        state_attr(''weather.openweathermap'', ''forecast'')[4].wind_bearing }},{{
+        state_attr(''weather.openweathermap'', ''forecast'')[5].datetime }},{{ state_attr(''weather.openweathermap'',
+        ''forecast'')[5].condition }},{{ state_attr(''weather.openweathermap'', ''forecast'')[5].temperature
+        }},{{ state_attr(''weather.openweathermap'', ''forecast'')[5].precipitation
+        }},{{ state_attr(''weather.openweathermap'', ''forecast'')[5].wind_speed }},{{
+        state_attr(''weather.openweathermap'', ''forecast'')[5].wind_bearing }},{{
+        state_attr(''weather.openweathermap'', ''forecast'')[6].datetime }},{{ state_attr(''weather.openweathermap'',
+        ''forecast'')[6].condition }},{{ state_attr(''weather.openweathermap'', ''forecast'')[6].temperature
+        }},{{ state_attr(''weather.openweathermap'', ''forecast'')[6].precipitation
+        }},{{ state_attr(''weather.openweathermap'', ''forecast'')[6].wind_speed }},{{
+        state_attr(''weather.openweathermap'', ''forecast'')[6].wind_bearing }},{{
+        state_attr(''weather.openweathermap'', ''forecast'')[7].datetime }},{{ state_attr(''weather.openweathermap'',
+        ''forecast'')[7].condition }},{{ state_attr(''weather.openweathermap'', ''forecast'')[7].temperature
+        }},{{ state_attr(''weather.openweathermap'', ''forecast'')[7].precipitation
+        }},{{ state_attr(''weather.openweathermap'', ''forecast'')[7].wind_speed }},{{
+        state_attr(''weather.openweathermap'', ''forecast'')[7].wind_bearing }}'
+  mode: single

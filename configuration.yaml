@@ -3,30 +3,21 @@ automation old: !include_dir_list automations
 
 camera:
   - platform: generic
-    name: Living Room
+    name: Porch
     still_image_url: !secret camera_1_url
   - platform: generic
-    name: Porch
+    name: Living Room
     still_image_url: !secret camera_2_url
   - platform: generic
-    name: Basement
+    name: Garage
     still_image_url: !secret camera_3_url
   - platform: generic
-    name: Garage
+    name: Basement
     still_image_url: !secret camera_4_url
 
 config:
 
-cover: 
-  - platform: myq
-    username: !secret myq_username
-    password: !secret myq_password
-    type: chamberlain
-
 discovery:
-
-ecobee:
-  api_key: !secret ecobee_api_key 
 
 frontend:
                                                   
@@ -37,12 +28,21 @@ google_assistant:
   report_state: true
   exposed_domains:
     - cover
-    - media_player
-    - switch
-    - light
     - script
+    - light
+  entity_config:
+    media_player.lg_tv:
+      name: LG TV
+      room: Living Room
 
 group: !include groups.yaml
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 172.30.33.0/24
+  ip_ban_enabled: true
+  login_attempts_threshold: 5
 
 history:
   exclude: 
@@ -53,7 +53,6 @@ history:
     - sun
     - automation
     - zone
-    - zwave
     - input_boolean
 
 homeassistant:
@@ -87,28 +86,54 @@ logger:
   logs:
     homeassistant.core: warning
     # homeassistant.components.notify: debug
-    homeassistant.components.automation: debug
-    homeassistant.components.shell_command: debug
+    #homeassistant.components.automation: debug
+    #homeassistant.components.shell_command: debug
+    homeassistant.components.http: warning
 
 map:
 
 mobile_app:
 
+nest:
+  client_id: !secret nest_client_id
+  client_secret: !secret nest_client_secret
+  project_id: !secret nest_project_id
+  # subscriber_id: !secret nest_subscriber_id
+
+  
 notify: 
   - platform: pushbullet
     name: Pushbullet
     api_key: !secret pushbullet_api_key  
-  - platform: webostv
-    host: 192.168.1.19
-    name: lg_tv
+  #- platform: webostv
+  #  host: 192.168.1.19
+  #  name: lg_tv
+  - name: weatherdata
+    platform: file
+    filename: weatherdata.csv  
 
 recorder:
-  purge_keep_days: 7
+  purge_keep_days: 3
   db_url: !secret recorder_db_url
   exclude:
+    domains:
+      - input_boolean
+      - input_number
+      - input_select
+      - input_text
+      - sun
+      - weather
+      - camera  
     entities:
-      - media_player.galaxy_s7
-
+      - script.motion_detected_notifications
+      - sensor.processor_use
+      - sensor.memory_use_percent
+      - sensor.ha_last_reboot
+      - sensor.ha_uptime
+      - sensor.processor_use_percent
+    event_types:
+      - call_service      
+      
 sensor: !include sensors.yaml
 
 script: !include scripts.yaml
@@ -117,6 +142,7 @@ shell_command:
   cam_2_snapshot: "curl -X GET $(sh shell/secret.sh 'camera_2_url') > www/images/snapshot_cam_2.jpg"
   secret: /usr/share/hassio/homeassistant/shell/secret.sh
   set_pihole_hosts: /usr/share/hassio/homeassistant/shell/set_pihole_hosts.sh
+  snapshot_to_disk: /bin/bash -c "echo '{{ image_data }}' | base64 -d > www/images/snapshot_cam_{{ channel_number }}.jpg"
 
 sun:
 
@@ -144,6 +170,6 @@ tplink:
 updater:
   include_used_components: true
 
-webostv: 
-  host: 192.168.1.19
-  name: LG TV  
+webostv:
+  host: 192.168.1.25
+  name: LG TV

@@ -59,7 +59,7 @@ notify_liz_phone_cam:
           url: https://twosquaredlove.duckdns.org/local/images/snapshot_cam_{{channel_number}}.jpg?{{now().strftime("%s")}}.jpg
       title: '{{message}}'
       message: '{{timestamp}}'
-    service: notify.mobile_app_iphone
+    service: notify.mobile_app_liz_cartons_iphone
 notify_patrick_phone_cam:
   alias: Notify Patrick Phone cam
   sequence:
@@ -71,7 +71,7 @@ notify_patrick_phone_cam:
         channel: Motion cam {{channel_number}}
       title: '{{message}}'
       message: '{{timestamp}}'
-    service: notify.mobile_app_patrick_s_galaxy_s10
+    service: notify.mobile_app_galaxy_s10
 notify_pushbullet_cam:
   alias: Notify Pushbullet cam
   sequence:
@@ -84,6 +84,10 @@ notify_pushbullet_cam:
 motion_detected_notifications:
   alias: Motion detected notifications
   sequence:
+  - service: shell_command.snapshot_to_disk
+    data_template:
+      image_data: '{{image_data}}'
+      channel_number: '{{channel_number}}'
   - condition: template
     value_template: '{{ is_state("timer.disable_cams", "idle") and is_state("input_boolean.cam_" ~ channel_number ~ "_notify", "on") }}'
   - service: script.notify_lg_tv_cam
